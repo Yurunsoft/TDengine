@@ -354,13 +354,7 @@ function install_config() {
         ${csudo}chmod 644 ${cfg_install_dir}/*
     fi
 
-    # Save standard input to 6 and open / dev / TTY on standard input
-    exec 6<&0 0</dev/tty
-
     local_fqdn_check
-
-    # restore the backup standard input, and turn off 6
-    exec 0<&6 6<&-
 
     ${csudo}mv ${cfg_dir}/taos.cfg ${cfg_dir}/taos.cfg.new
     ${csudo}ln -s ${cfg_install_dir}/taos.cfg ${cfg_dir}
@@ -375,9 +369,7 @@ function install_config() {
     echo
     echo -e -n "${GREEN}OR leave it blank to build one${NC}:"
     #read firstEp
-    if exec < /dev/tty; then
-        read firstEp;
-    fi
+    read firstEp;
     while true; do
     if [ ! -z "$firstEp" ]; then
         # check the format of the firstEp
